@@ -1,6 +1,6 @@
 
 //import { useState } from 'react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import NoteCard from './NoteCard.jsx'
 
 const startingNotes = [
@@ -43,6 +43,8 @@ function Notes() {
   })
 
   const [search, setSearch] = useState('')
+  const titleRef = useRef(null)
+
 
   useEffect(() => {
       localStorage.setItem('notes', JSON.stringify(notes))
@@ -53,7 +55,8 @@ function Notes() {
    useEffect(() => {
      setTimeout(() => {
        localStorage.setItem('draft', JSON.stringify(formData))
-       console.log('draft saved:', formData.title)
+       //console.log('draft saved:', formData.title)
+       //this shows in console log what the draft is, deleting it will cause it to not show
      }, 1000)
   }, [formData])
 
@@ -87,6 +90,7 @@ function Notes() {
       title: '',
       body: '',
     })
+    titleRef.current.focus()    //added on step 6
   }
 
   // STEP 6: Delete a note
@@ -127,6 +131,7 @@ function Notes() {
           </p>
 
           <input
+            ref={titleRef} //added step 6
             name="title"
             value={formData.title}
             onChange={handleChange}
