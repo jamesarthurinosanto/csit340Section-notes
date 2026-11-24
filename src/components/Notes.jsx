@@ -156,7 +156,7 @@ function Notes() {
         </form>
 
         <div className="mt-auto text-[12px] text-[#aaa]">
-          Created by YOUR NAME
+          {/* Created by YOUR NAME */}
         </div>
       </aside>
 
