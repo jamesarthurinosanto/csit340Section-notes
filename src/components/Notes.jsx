@@ -42,13 +42,20 @@ function Notes() {
     body: '',
   })
 
-  // STEP 8: Search state
   const [search, setSearch] = useState('')
 
   useEffect(() => {
       localStorage.setItem('notes', JSON.stringify(notes))
    }, [notes])
 
+
+   //in instrucitons "formData" is "form"
+   useEffect(() => {
+     setTimeout(() => {
+       localStorage.setItem('draft', JSON.stringify(formData))
+       console.log('draft saved:', formData.title)
+     }, 1000)
+  }, [formData])
 
   function handleChange(event) {
     const { name, value } = event.target
