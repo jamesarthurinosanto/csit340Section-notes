@@ -1,6 +1,6 @@
 
 //import { useState } from 'react'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import NoteCard from './NoteCard.jsx'
 
 const startingNotes = [
@@ -100,10 +100,13 @@ function Notes() {
     )
   }
 
-  // STEP 8: Filter notes by title
-  const filteredNotes = notes.filter((note) =>
-    note.title.toLowerCase().includes(search.toLowerCase())
-  )
+  // Added on Step 8, notes project
+  const filteredNotes = useMemo(() => { //"filteredNotes" is "visibleNotes" on example
+    console.log('filtering')
+    return notes.filter((note) =>
+      note.title.toLowerCase().includes(search.toLowerCase())
+    )
+  }, [notes, search])
 
   return (
     <div className="grid min-h-screen grid-cols-[420px_1fr]">
