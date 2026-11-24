@@ -1,5 +1,4 @@
 
-//import { useState } from 'react'
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import NoteCard from './NoteCard.jsx'
 
@@ -15,8 +14,6 @@ const startingNotes = [
     body: 'Practice writing one handler for many inputs.',
   },
 ]
- 
-
 
 function Notes() {
   // const [notes, setNotes] = useState([
@@ -33,31 +30,36 @@ function Notes() {
   // ])
 
   const [notes, setNotes] = useState(() => {
-     const saved = localStorage.getItem('notes')
-     return saved ? JSON.parse(saved) : startingNotes
+    const saved = localStorage.getItem('notes')
+    return saved ? JSON.parse(saved) : startingNotes
   })
 
-  const [formData, setFormData] = useState({
-    title: '',
-    body: '',
+  const [formData, setFormData] = useState(() => {
+    const savedDraft = localStorage.getItem('draft')
+    return savedDraft ? JSON.parse(savedDraft) : {
+      title: '',
+      body: '',
+    }
   })
 
   const [search, setSearch] = useState('')
   const titleRef = useRef(null)
 
-
   useEffect(() => {
-      localStorage.setItem('notes', JSON.stringify(notes))
-   }, [notes])
+    localStorage.setItem('notes', JSON.stringify(notes))
+  }, [notes])
 
+  // in instructions "formData" is "form"
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (!formData.title && !formData.body) {
+        localStorage.removeItem('draft')
+      } else {
+        localStorage.setItem('draft', JSON.stringify(formData))
+      }
+    }, 1000)
 
-   //in instrucitons "formData" is "form"
-   useEffect(() => {
-     setTimeout(() => {
-       localStorage.setItem('draft', JSON.stringify(formData))
-       //console.log('draft saved:', formData.title)
-       //this shows in console log what the draft is, deleting it will cause it to not show
-     }, 1000)
+    return () => clearTimeout(timeout)
   }, [formData])
 
   function handleChange(event) {
@@ -90,7 +92,10 @@ function Notes() {
       title: '',
       body: '',
     })
-    titleRef.current.focus()    //added on step 6
+
+    localStorage.removeItem('draft')
+
+    titleRef.current.focus() // added on step 6
   }
 
   // STEP 6: Delete a note
@@ -133,7 +138,7 @@ function Notes() {
           </p>
 
           <input
-            ref={titleRef} //added step 6
+            ref={titleRef} // added step 6
             name="title"
             value={formData.title}
             onChange={handleChange}
